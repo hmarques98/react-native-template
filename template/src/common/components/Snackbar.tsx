@@ -1,19 +1,19 @@
-import React, { useEffect, useMemo, useRef } from "react"
-import { StyleSheet, Text, View } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
-import Animated, { cond, neq, set, useCode } from "react-native-reanimated"
-import { bin, timing, useValue } from "react-native-redash"
-import { useSafeArea } from "react-native-safe-area-context"
+import React, { useEffect, useMemo, useRef } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Animated, { cond, neq, set, useCode } from 'react-native-reanimated';
+import { bin, timing, useValue } from 'react-native-redash';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const SNACKBAR_HEIGHT = 54
+const SNACKBAR_HEIGHT = 54;
 
 interface SnackbarProps {
-  visible: boolean
-  message: string
-  onDismiss: () => void
-  onPress?: () => void
-  btnTitle?: string
-  unsafeView?: boolean
+  visible: boolean;
+  message: string;
+  onDismiss: () => void;
+  onPress?: () => void;
+  btnTitle?: string;
+  unsafeView?: boolean;
 }
 const Snackbar = ({
   visible,
@@ -23,14 +23,14 @@ const Snackbar = ({
   onPress,
   unsafeView,
 }: SnackbarProps) => {
-  const timeoutRef = useRef(-1)
-  const insets = useSafeArea()
+  const timeoutRef = useRef(-1);
+  const insets = useSafeAreaInsets();
   const safeArea = !unsafeView
     ? insets
-    : { top: 0, bottom: 0, left: 0, right: 0 }
+    : { top: 0, bottom: 0, left: 0, right: 0 };
   const snackbarHeight =
-    SNACKBAR_HEIGHT + safeArea.bottom + safeArea.bottom / 2 + 10
-  const translateY = useValue(snackbarHeight)
+    SNACKBAR_HEIGHT + safeArea.bottom + safeArea.bottom / 2 + 10;
+  const translateY = useValue(snackbarHeight);
   const opacity = useMemo(
     () =>
       timing({
@@ -40,7 +40,7 @@ const Snackbar = ({
       }),
     // eslint-disable-next-line
     [message]
-  )
+  );
 
   useCode(
     () => [
@@ -68,27 +68,27 @@ const Snackbar = ({
       ),
     ],
     [visible, snackbarHeight, translateY]
-  )
+  );
 
   useEffect(() => {
     if (visible) {
       timeoutRef.current = setTimeout(() => {
-        onDismiss()
-      }, 3000)
+        onDismiss();
+      }, 3000);
     }
 
-    return clearTimeoutRef
-  }, [onDismiss, visible])
+    return clearTimeoutRef;
+  }, [onDismiss, visible]);
 
-  const clearTimeoutRef = () => clearTimeout(timeoutRef.current)
+  const clearTimeoutRef = () => clearTimeout(timeoutRef.current);
 
   const handleOnPress = () => {
-    onDismiss()
-    clearTimeout(timeoutRef.current)
+    onDismiss();
+    clearTimeout(timeoutRef.current);
     setTimeout(() => {
-      onPress!()
-    }, 150)
-  }
+      onPress!();
+    }, 150);
+  };
 
   return (
     <View style={styles.container}>
@@ -98,7 +98,7 @@ const Snackbar = ({
           {
             transform: [{ translateY }],
             height: snackbarHeight,
-            backgroundColor: "#1D2226",
+            backgroundColor: '#1D2226',
           },
         ]}
       >
@@ -124,7 +124,7 @@ const Snackbar = ({
                 styles.dismissText,
                 {
                   marginBottom: safeArea.bottom,
-                  color: "#15AAE1",
+                  color: '#15AAE1',
                 },
               ]}
             >
@@ -142,7 +142,7 @@ const Snackbar = ({
               styles.dismissText,
               {
                 marginBottom: safeArea.bottom,
-                color: "#2E97C8",
+                color: '#2E97C8',
               },
             ]}
           >
@@ -151,39 +151,39 @@ const Snackbar = ({
         </TouchableOpacity>
       </Animated.View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   touchable: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 90,
   },
   dismissText: {
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   text: {
-    color: "white",
+    color: 'white',
     fontSize: 14,
     flex: 1,
     paddingHorizontal: 22,
   },
   snackbar: {
     height: SNACKBAR_HEIGHT,
-    width: "100%",
+    width: '100%',
     bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   container: {
-    width: "100%",
-    position: "absolute",
+    width: '100%',
+    position: 'absolute',
     bottom: 0,
     zIndex: 10,
   },
-})
+});
 
-export default Snackbar
+export default Snackbar;
