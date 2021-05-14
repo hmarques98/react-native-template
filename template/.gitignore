@@ -63,3 +63,6 @@ buck-out/
 /ios/Pods/
 
 package-lock.json
+.env
+.env.staging
+.env.prod
